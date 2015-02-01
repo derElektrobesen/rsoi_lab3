@@ -1,0 +1,188 @@
+[Sun Feb  1 19:23:04 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 19:23:11 2015] [debug] Your secret passphrase needs to be changed
+[Sun Feb  1 19:23:11 2015] [debug] GET "/"
+[Sun Feb  1 19:23:11 2015] [debug] Routing to controller "Front::Controller::Example" and action "welcome"
+[Sun Feb  1 19:23:11 2015] [debug] Rendering template "example/welcome.html.ep"
+[Sun Feb  1 19:23:11 2015] [debug] Rendering template "layouts/default.html.ep"
+[Sun Feb  1 19:23:11 2015] [debug] 200 OK (0.007669s, 130.395/s)
+[Sun Feb  1 19:23:59 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 19:24:01 2015] [debug] GET "/"
+[Sun Feb  1 19:24:01 2015] [debug] Routing to controller "Front::Controller::Example" and action "welcome"
+[Sun Feb  1 19:24:01 2015] [debug] Rendering template "example/welcome.html.ep"
+[Sun Feb  1 19:24:01 2015] [debug] Rendering template "layouts/default.html.ep"
+[Sun Feb  1 19:24:01 2015] [debug] 200 OK (0.007238s, 138.160/s)
+[Sun Feb  1 19:24:04 2015] [debug] GET "/"
+[Sun Feb  1 19:24:04 2015] [debug] Routing to controller "Front::Controller::Example" and action "welcome"
+[Sun Feb  1 19:24:04 2015] [debug] Rendering cached template "example/welcome.html.ep"
+[Sun Feb  1 19:24:04 2015] [debug] Rendering cached template "layouts/default.html.ep"
+[Sun Feb  1 19:24:04 2015] [debug] 200 OK (0.001907s, 524.384/s)
+[Sun Feb  1 21:19:41 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:19:41 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:19:41 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:19:41 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:19:41 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:19:41 2015] [debug] 404 Not Found (0.034069s, 29.352/s)
+[Sun Feb  1 21:19:53 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 21:19:55 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:19:55 2015] [debug] Controller "Front::Index" does not exist
+[Sun Feb  1 21:19:55 2015] [debug] Template "index/index.html.ep" not found
+[Sun Feb  1 21:19:55 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:19:55 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:19:55 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:19:55 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:19:55 2015] [debug] 404 Not Found (0.032791s, 30.496/s)
+[Sun Feb  1 21:20:47 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:20:47 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:20:47 2015] [debug] Template "index/index.html.ep" not found
+[Sun Feb  1 21:20:47 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:20:47 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:20:47 2015] [debug] Rendering cached inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:20:47 2015] [debug] Rendering cached inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:20:47 2015] [debug] 404 Not Found (0.012250s, 81.633/s)
+[Sun Feb  1 21:20:51 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 21:20:52 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:20:52 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:20:52 2015] [debug] Template "index/index.html.ep" not found
+[Sun Feb  1 21:20:52 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:20:52 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:20:52 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:20:52 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:20:52 2015] [debug] 404 Not Found (0.030010s, 33.322/s)
+[Sun Feb  1 21:22:29 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:22:29 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:22:29 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 21:22:29 2015] [debug] Template "layouts/default.html.ep" not found
+[Sun Feb  1 21:22:29 2015] [debug] 200 OK (0.003427s, 291.800/s)
+[Sun Feb  1 21:22:51 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:22:51 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:22:51 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 21:22:51 2015] [debug] Template "layouts/default.html.ep" not found
+[Sun Feb  1 21:22:51 2015] [debug] 200 OK (0.001740s, 574.713/s)
+[Sun Feb  1 21:23:17 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:23:17 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:23:17 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 21:23:17 2015] [debug] Template "layouts/default.html.ep" not found
+[Sun Feb  1 21:23:17 2015] [debug] 200 OK (0.001639s, 610.128/s)
+[Sun Feb  1 21:23:31 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 21:23:33 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:23:33 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:23:33 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 21:23:33 2015] [debug] Template "layouts/index.html.ep" not found
+[Sun Feb  1 21:23:33 2015] [debug] 200 OK (0.005175s, 193.237/s)
+[Sun Feb  1 21:24:02 2015] [debug] GET "/index.html"
+[Sun Feb  1 21:24:02 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:24:02 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 21:24:02 2015] [debug] Rendering template "layouts/index.html.ep"
+[Sun Feb  1 21:24:02 2015] [debug] 200 OK (0.005559s, 179.888/s)
+[Sun Feb  1 21:24:31 2015] [debug] GET "/index"
+[Sun Feb  1 21:24:31 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:24:31 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:24:31 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:24:31 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:24:31 2015] [debug] 404 Not Found (0.030720s, 32.552/s)
+[Sun Feb  1 21:24:58 2015] [debug] GET "/index"
+[Sun Feb  1 21:24:58 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:24:58 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:24:58 2015] [debug] Rendering cached inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:24:58 2015] [debug] Rendering cached inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:24:58 2015] [debug] 404 Not Found (0.010245s, 97.609/s)
+[Sun Feb  1 21:25:02 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 21:25:03 2015] [debug] GET "/index"
+[Sun Feb  1 21:25:03 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:25:03 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 21:25:03 2015] [debug] Rendering template "layouts/index.html.ep"
+[Sun Feb  1 21:25:03 2015] [debug] 200 OK (0.009375s, 106.667/s)
+[Sun Feb  1 21:26:44 2015] [debug] GET "/index"
+[Sun Feb  1 21:26:44 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:26:44 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 21:26:44 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 21:26:44 2015] [debug] 200 OK (0.001786s, 559.910/s)
+[Sun Feb  1 21:26:56 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 21:26:57 2015] [debug] GET "/index"
+[Sun Feb  1 21:26:57 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:26:57 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 21:26:57 2015] [debug] Rendering template "layouts/index.html.ep"
+[Sun Feb  1 21:26:57 2015] [debug] 200 OK (0.007342s, 136.203/s)
+[Sun Feb  1 21:27:03 2015] [debug] GET "/users"
+[Sun Feb  1 21:27:03 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:27:03 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:27:03 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:27:03 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:27:03 2015] [debug] 404 Not Found (0.030201s, 33.111/s)
+[Sun Feb  1 21:27:17 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 21:27:18 2015] [debug] GET "/index"
+[Sun Feb  1 21:27:18 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:27:18 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 21:27:18 2015] [debug] Rendering template "layouts/index.html.ep"
+[Sun Feb  1 21:27:18 2015] [debug] 200 OK (0.008381s, 119.318/s)
+[Sun Feb  1 21:29:10 2015] [debug] GET "/messages"
+[Sun Feb  1 21:29:10 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 21:29:10 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 21:29:10 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 21:29:11 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 21:29:11 2015] [debug] 404 Not Found (0.027538s, 36.313/s)
+[Sun Feb  1 21:29:12 2015] [debug] GET "/index"
+[Sun Feb  1 21:29:12 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 21:29:12 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 21:29:12 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 21:29:12 2015] [debug] 200 OK (0.001908s, 524.109/s)
+[Sun Feb  1 22:03:23 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 22:03:37 2015] [debug] GET "/index"
+[Sun Feb  1 22:03:37 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 22:03:37 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 22:03:37 2015] [debug] Rendering template "layouts/index.html.ep"
+[Sun Feb  1 22:03:37 2015] [debug] 200 OK (0.018322s, 54.579/s)
+[Sun Feb  1 22:03:38 2015] [debug] GET "/users"
+[Sun Feb  1 22:03:38 2015] [debug] Routing to controller "Front::Controller::Users" and action "get_users_list"
+[Sun Feb  1 22:03:38 2015] [debug] Template "users/get_users_list.html.ep" not found
+[Sun Feb  1 22:03:38 2015] [debug] Template "not_found.development.html.ep" not found
+[Sun Feb  1 22:03:38 2015] [debug] Template "not_found.html.ep" not found
+[Sun Feb  1 22:03:38 2015] [debug] Rendering inline template "bcff5b05a91a439876bddf8a8a2be763"
+[Sun Feb  1 22:03:38 2015] [debug] Rendering inline template "b2d451b47e2053ce583cbfdf7bcc6006"
+[Sun Feb  1 22:03:38 2015] [debug] 404 Not Found (0.029547s, 33.844/s)
+[Sun Feb  1 22:04:35 2015] [debug] GET "/index"
+[Sun Feb  1 22:04:35 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 22:04:35 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 22:04:35 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:04:35 2015] [debug] 200 OK (0.002334s, 428.449/s)
+[Sun Feb  1 22:05:51 2015] [debug] GET "/index"
+[Sun Feb  1 22:05:51 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 22:05:51 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 22:05:51 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:05:51 2015] [debug] 200 OK (0.001725s, 579.710/s)
+[Sun Feb  1 22:05:54 2015] [info] Listening at "http://*:3000"
+[Sun Feb  1 22:05:55 2015] [debug] GET "/index"
+[Sun Feb  1 22:05:55 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 22:05:55 2015] [debug] Rendering template "index/index.html.ep"
+[Sun Feb  1 22:05:55 2015] [debug] Rendering template "layouts/index.html.ep"
+[Sun Feb  1 22:05:55 2015] [debug] 200 OK (0.006111s, 163.639/s)
+[Sun Feb  1 22:05:56 2015] [debug] GET "/index"
+[Sun Feb  1 22:05:56 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 22:05:56 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 22:05:56 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:05:56 2015] [debug] 200 OK (0.001866s, 535.906/s)
+[Sun Feb  1 22:05:57 2015] [debug] GET "/users"
+[Sun Feb  1 22:05:57 2015] [debug] Routing to controller "Front::Controller::Users" and action "get_users_list"
+[Sun Feb  1 22:05:57 2015] [debug] Rendering template "users/get_users_list.html.ep"
+[Sun Feb  1 22:05:57 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:05:57 2015] [debug] 200 OK (0.003188s, 313.676/s)
+[Sun Feb  1 22:05:59 2015] [debug] GET "/messages"
+[Sun Feb  1 22:05:59 2015] [debug] Routing to controller "Front::Controller::Messages" and action "get_messages_list"
+[Sun Feb  1 22:05:59 2015] [debug] Rendering template "messages/get_messages_list.html.ep"
+[Sun Feb  1 22:05:59 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:05:59 2015] [debug] 200 OK (0.003046s, 328.299/s)
+[Sun Feb  1 22:05:59 2015] [debug] GET "/users"
+[Sun Feb  1 22:05:59 2015] [debug] Routing to controller "Front::Controller::Users" and action "get_users_list"
+[Sun Feb  1 22:05:59 2015] [debug] Rendering cached template "users/get_users_list.html.ep"
+[Sun Feb  1 22:05:59 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:05:59 2015] [debug] 200 OK (0.001630s, 613.497/s)
+[Sun Feb  1 22:06:01 2015] [debug] GET "/messages"
+[Sun Feb  1 22:06:01 2015] [debug] Routing to controller "Front::Controller::Messages" and action "get_messages_list"
+[Sun Feb  1 22:06:01 2015] [debug] Rendering cached template "messages/get_messages_list.html.ep"
+[Sun Feb  1 22:06:01 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:06:01 2015] [debug] 200 OK (0.001842s, 542.888/s)
+[Sun Feb  1 22:06:19 2015] [debug] GET "/index"
+[Sun Feb  1 22:06:19 2015] [debug] Routing to controller "Front::Controller::Index" and action "index"
+[Sun Feb  1 22:06:19 2015] [debug] Rendering cached template "index/index.html.ep"
+[Sun Feb  1 22:06:19 2015] [debug] Rendering cached template "layouts/index.html.ep"
+[Sun Feb  1 22:06:19 2015] [debug] 200 OK (0.001745s, 573.066/s)
