@@ -8,7 +8,7 @@ use Cwd 'abs_path';
 BEGIN {
     my $path = abs_path $0;
     $path =~ s#/\w*$##;
-    unshift @INC, map { "$path/$_" } qw( ../lib ../.. );
+    unshift @INC, map { "$path/$_" } qw( ../lib ../../lib );
 };
 
 # Start command line interface for application
