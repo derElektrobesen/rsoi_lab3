@@ -3,7 +3,13 @@
 use strict;
 use warnings;
 
-use lib 'lib';
+use Cwd 'abs_path';
+
+BEGIN {
+    my $path = abs_path $0;
+    $path =~ s#/\w*$##;
+    unshift @INC, map { "$path/$_" } qw( ../lib ../.. );
+};
 
 # Start command line interface for application
 require Mojolicious::Commands;
