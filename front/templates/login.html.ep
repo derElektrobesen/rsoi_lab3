@@ -1,5 +1,5 @@
-% layout 'default';
-% title 'Login';
+% layout 'default', url => 'login';
+% title 'login';
 
 <form action="/login" method="POST" >
 % if (param 'login') {

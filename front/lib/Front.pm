@@ -25,10 +25,10 @@ sub startup {
 	$r->get('/register')->name('register');
 	$r->post('/register')->to('index#register');
 
-	$r->get('/user')->to('index#get_user_info');
+	$r->get('/me')->to('index#get_user_info');
 
-	$r->get('/message')->to(template => 'add_message')->name('add_message');
-	$r->post('/message')->to('index#add_message');
+	$r->get('/send_message')->to(template => 'add_message')->name('add_message');
+	$r->post('/send_message')->to('index#add_message');
 
 	$r->get('/users')->to('index#get_users_list');
 	$r->get('/messages')->to('index#get_messages_list');

@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%
+my %sidebar = (
+    index => 'Home',
+    login => 'Login',
+    logout => 'Logout',
+    register => 'Register',
+    me => 'Current user info',
+    users => 'Users list',
+    messages => 'Messages list',
+    send_message => 'Send message',
+);
+my @order = qw( index login register me users messages send_message logout );
+%>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +25,14 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/simple-sidebar.css" rel="stylesheet">
 
-    <title><%= title %></title>
+    <style>
+        .sidebar-nav .active {
+            text-indent: 50px;
+            font-size: 17px;
+            color: #fff;
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
 </head>
 
 <body>
@@ -21,15 +42,10 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="/index">Title page</a>
-                </li>
-                <li>
-                    <a href="/users">Users list</a>
-                </li>
-                <li>
-                    <a href="/messages">Messages</a>
-                </li>
+                <li class="sidebar-brand"></li>
+                <% for my $li (@order) { %>
+                <li class="<%= $li eq $url ? 'active' : '' %>"><a href="/<%== $li %>"><%== $sidebar{$li} %></a></li>
+                <% } %>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -39,7 +55,6 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1><%= title %></h1>
                         <%= content %>
                     </div>
                 </div>
