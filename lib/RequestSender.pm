@@ -27,6 +27,8 @@ sub send_request {
 		@_,
 	);
 
+	$args{url} = "http://localhost/$args{url}" if defined $args{url};
+
 	$inst->app->log->debug(sprintf "Sending request [method: %s] [url: %s] [port: %d] [args: %s]",
 		uc($args{method}), $args{url}, $args{port}, Dumper $args{args});
 

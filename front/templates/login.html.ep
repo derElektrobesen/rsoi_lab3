@@ -9,6 +9,6 @@ Login:<br>
 %= text_field 'login'
 <br>Password:<br>
 %= password_field 'password'
-<br>
+<br><br>
 <input type="submit" value="Login">
 </form>
