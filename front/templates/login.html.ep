@@ -1,0 +1,14 @@
+% layout 'default';
+% title 'Login';
+
+<form action="/login" method="POST" >
+% if (param 'login') {
+	<b>Wrong name or password, please try again.</b><br>
+% }
+Login:<br>
+%= text_field 'login'
+<br>Password:<br>
+%= password_field 'password'
+<br>
+<input type="submit" value="Login">
+</form>

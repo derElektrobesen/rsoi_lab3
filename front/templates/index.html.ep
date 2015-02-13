@@ -1,4 +1,4 @@
-% layout 'index';
+% layout 'default';
 % title 'Welcome';
 This page was generated from the template "templates/example/welcome.html.ep"
 and the layout "templates/layouts/default.html.ep",

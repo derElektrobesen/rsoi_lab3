@@ -32,6 +32,8 @@ while (<$f>) {
 	$PORTS{$1} = $2;
 }
 
+close $f;
+
 sub FRONT_PORT()	{ return $PORTS{FRONT_PORT} || croak "Can't locate FRONT_PORT in config\n"; }
 sub LOGIC_PORT()	{ return $PORTS{LOGIC_PORT} || croak "Can't locate LOGIC_PORT in config\n"; }
 sub USERS_PORT()	{ return $PORTS{USERS_PORT} || croak "Can't locate USERS_PORT in config\n"; }

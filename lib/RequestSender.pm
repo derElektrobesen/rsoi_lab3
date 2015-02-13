@@ -5,6 +5,7 @@ use warnings;
 
 use Carp qw(croak);
 use Mojo::UserAgent;
+use Data::Dumper::OneLine;
 
 use base qw(Exporter);
 
@@ -17,12 +18,17 @@ our %EXPORT_TAGS = (
 );
 
 sub send_request {
+	my $inst = shift;
 	my %args = (
 		method => 'get',
 		url => undef,
 		port => undef,
 		args => {},
+		@_,
 	);
+
+	$inst->app->log->debug(sprintf "Sending request [method: %s] [url: %s] [port: %d] [args: %s]",
+		uc($args{method}), $args{url}, $args{port}, Dumper $args{args});
 
 	croak 'url not specified' unless $args{url};
 
@@ -42,5 +48,12 @@ sub send_request {
 	my $s = $switch{$args{method}};
 	croak "unknown metod specified" unless defined $s;
 
-	return $s->()->res->json();
+	my $resp = $s->()->res->json();
+	unless (defined $resp) {
+		$inst->app->log->warn("Response is undefined");
+	} else {
+		$inst->app->log->debug("Response: " . Dumper($resp));
+	}
+
+	return $resp;
 }
