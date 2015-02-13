@@ -15,7 +15,6 @@ sub startup {
 	# Normal route to controller
 	$r->get('/')->to('index#index');
 	$r->get('/index')->to('index#index');
-	$r->get('/index.html')->to('index#index');
 
 	$r->get('/login')->name('login');
 	$r->post('/login')->to('index#login');

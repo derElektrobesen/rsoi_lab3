@@ -6,7 +6,7 @@ pidsf='.pids'
 if [[ -f .pids ]]
 then
     pids=`cat $pidsf`
-    kill -TERM $pids
+    kill -9 $pids
     sleep 1
 fi
 

@@ -59,3 +59,5 @@ sub send_request {
 
 	return $resp;
 }
+
+1;

@@ -59,12 +59,12 @@ sub register {
 	return $self->_err('register', 'Passwords do not match') if $params{password} ne $params{r_password};
 
 	my $r = send_request($self,
-		method => 'post',
+		method => 'put',
 		url => 'register',
 		port => USERS_PORT,
 		args => \%params);
 
-	return $self->_err('register', 'Internal server error') unless $r;
+	return $self->_err('register', "Can't register: internal server error") unless $r;
 	return $self->_err('register', $r->{error}) if $r->{error};
 
 	$r = send_request($self,
@@ -76,7 +76,7 @@ sub register {
 			password => $params{password},
 		});
 
-	return $self->_err('register', 'Internal server error') if not $r or not $r->{session_id};
+	return $self->_err('register', "Registration ok, but can't login: internal server error") if not $r or not $r->{session_id};
 	return $self->_err('register', $r->{error}) if $r->{error};
 
 	$self->session(session => $r->{session_id});
