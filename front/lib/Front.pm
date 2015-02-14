@@ -16,7 +16,7 @@ sub startup {
 	$r->get('/')->to('index#index');
 	$r->get('/index')->to('index#index');
 
-	$r->get('/login')->name('login');
+	$r->get('/login')->to('index#get_login');
 	$r->post('/login')->to('index#login');
 
 	$r->any('/logout')->to('index#logout');

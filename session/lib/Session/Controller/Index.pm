@@ -4,15 +4,15 @@ use Mojo::Base 'Mojolicious::Controller';
 use DB qw( :all );
 use Digest::MD5 qw( md5_hex );
 
+use Data::Dumper::OneLine;
+
 sub check_session {
 	my $self = shift;
 
-	my $came = $self->req->json();
+	return $self->render(json => { error => 'session_id not specified' }) unless $self->param('session_id');
 
-	return $self->render(json => { error => 'session_id not specified' }) unless $came->{session_id};
-
-	my $r = select_row($self, 'select user_id from sessions where session_id = ?', $came->{session_id});
-	return $self->render(json => { error => 'unauthorized' }) unless $r and $r->{id};
+	my $r = select_row($self, 'select user_id from sessions where session_id = ?', $self->param('session_id'));
+	return $self->render(json => { error => 'unauthorized' }) unless $r and $r->{user_id};
 
 	return $self->render(json => { ok => 1 });
 }

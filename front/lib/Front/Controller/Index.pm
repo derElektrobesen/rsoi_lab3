@@ -20,18 +20,34 @@ sub index {
 	$self->render(template => 'index');
 }
 
+sub get_login {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+	if ($sid) {
+		my $r = send_request($self,
+			method => 'get',
+			url => 'session',
+			port => SESSION_PORT,
+			args => { session_id => $sid });
+		return $self->stash(logged_in => 1)->render(template => 'login') if $r && $r->{ok};
+		$self->session(expires => 1);
+	}
+	$self->render(template => 'login');
+}
+
 sub login {
 	my $self = shift;
 
 	my $login = $self->param('login');
 	my $pass = $self->param('password');
 
-	return $self->redirect_to('login') unless $login or $pass;
+	return $self->_err('login', 'Empty login or password') unless $login or $pass;
 
 	$self->app->log->debug("Trying to login");
 	my $r = send_request($self,
 		method => 'put',
-		url => 'http://localhost/login',
+		url => 'login',
 		port => SESSION_PORT,
 		args => {
 			login => $login,
@@ -43,7 +59,7 @@ sub login {
 		return $self->redirect_to('index');
 	}
 
-	$self->redirect_to('login'); # TODO : add stash
+	return $self->_err('login', 'Invalid login or password');
 }
 
 sub register {
