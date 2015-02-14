@@ -14,7 +14,7 @@ sub check_session {
 	my $r = select_row($self, 'select user_id from sessions where session_id = ?', $self->param('session_id'));
 	return $self->render(json => { error => 'unauthorized' }) unless $r and $r->{user_id};
 
-	return $self->render(json => { ok => 1 });
+	return $self->render(json => { ok => 1, uid => $r->{user_id} });
 }
 
 sub login {

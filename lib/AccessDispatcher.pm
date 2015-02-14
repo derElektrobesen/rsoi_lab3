@@ -21,12 +21,12 @@ our %EXPORT_TAGS = (
 );
 
 my %access_control = (
-	'app->login' => {
+	'login' => {
 		method => 'post',
 		access => 'all',
 	},
 
-	'app->logout' => {
+	'logout' => {
 		method => 'any',
 		access => 'authorized',
 	},
@@ -48,11 +48,11 @@ my %access_control = (
 
 	'users' => {
 		method => 'get',
-		access => 'all',
+		access => 'authorized',
 	},
 
 	'messages' => {
-		method => 'get',
+		method => 'any',
 		access => 'authorized',
 	},
 
@@ -93,6 +93,8 @@ sub check_access {
 			$inst->session(expires => 1);
 			return $inst->render(json => { error => $resp->{error} }) && undef;
 		}
+
+		$inst->stash(uid => $resp->{uid});
 	} else {
 		$inst->app->log->warn("Unknown access type found: $r->{access} [url: $url]");
 		return $inst->reply->exception("Internal error: access type") && undef;

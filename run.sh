@@ -11,7 +11,7 @@ then
 fi
 
 echo -n "" > $pidsf
-for var in 'front' 'logic' 'users' 'messages' 'session'
+for var in 'front' 'users' 'messages' 'session'
 do
     path=$(echo -n $var | perl -ne '$_ = uc $_;  printf "\"http://*:\$$_%s", "_PORT\""')
     path=$(eval "echo $path")

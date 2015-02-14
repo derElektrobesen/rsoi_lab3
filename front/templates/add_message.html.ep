@@ -1,0 +1,20 @@
+% layout 'default', url => 'send_message';
+
+% if (stash 'error') {
+    <b><%= stash 'error' %></b>
+% } elsif (stash 'done') {
+    <b>Done! <a href='/messages'>Messages list</a></b>
+% } elsif (stash 'not_logged_in') {
+    <b>Need to <a href="/login">login</a>.</b>
+% } else {
+<form action="/send_message" method="POST" >
+<b>Send mesage</b><br>
+%= text_area 'message'
+<br>
+<b>Destination:</b>
+%= select_field user => stash 'users'
+<br>
+<br>
+%= submit_button 'Send'
+</form>
+% }

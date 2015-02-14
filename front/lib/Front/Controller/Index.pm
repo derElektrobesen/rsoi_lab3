@@ -157,4 +157,46 @@ sub get_users_list {
 	return $self->stash(users_info => $r->{data})->render(template => 'users');
 }
 
+sub add_message {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+
+	my $r = send_request($self,
+		method => 'get',
+		url => 'users',
+		port => USERS_PORT,
+		args => { session_id => $sid, short => 1, user => $self->param('user') });
+
+	return $self->_err('add_message', 'Internal error: get_user_id') unless $r;
+	return $self->_err('add_message', $r->{error}) if $r->{error};
+
+	my $data = { to => $r->{uid}, message => $self->param('message') };
+
+	$r = send_request($self,
+		method => 'post',
+		url => 'messages',
+		port => MESSAGES_PORT,
+		args => { session_id => $sid, %$data });
+
+	return $self->_err('add_message', 'Internal error: add_message') unless $r;
+	return $self->_err('add_message', $r->{error}) if $r->{error};
+	return $self->stash(done => 1)->render(template => 'add_message');
+}
+
+sub get_add_message {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+	my $r = send_request($self,
+		method => 'get',
+		url => 'users',
+		port => USERS_PORT,
+		args => { session_id => $sid, short => 1 });
+
+	return $self->stash(not_logged_in => 1)->render(template => 'add_message') unless $r or $r->{data};
+
+	$self->stash(users => $r->{data})->render(template => 'add_message');
+}
+
 1;

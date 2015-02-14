@@ -47,19 +47,28 @@ sub get_users_list {
 	my $count = 2;
 	my $page = $self->param('page');
 	my $u = $self->param('user');
+	my $short = $self->param('short');
 
 	$page = undef if defined $u;
 
 	my @args;
-	my $req = sprintf('select login, name, lastname, surname, email, phone from users %s order by login %s',
-		$u ? push(@args, $u) && "where login = ?" : "",
-		$page ? push(@args, $count, ($page - 1) * $count) && "limit ? offset ?" : "");
+	my $req = sprintf('select id, login%s from users%s order by login%s',
+		$short ? "" : ", name, lastname, surname, email, phone",
+		$u ? push(@args, $u) && " where login = ?" : "",
+		$page ? push(@args, $count, ($page - 1) * $count) && " limit ? offset ?" : "");
 
 	my $content = select_all($self, $req, @args);
+	my $copy = $content;
 
 	return $self->render(json => { error => ($u ? "User $u not found in DB" : "No users found in DB") }) unless $content;
 
-	return $self->render(json => { data => $content, ($page ? (page => $page) : ()), count => scalar @$content });
+	$content = [ map { $_->{login} } @$content ] if $short;
+	return $self->render(json => {
+			data => $content,
+			($page ? (page => $page) : ()),
+			count => scalar @$content,
+			($u ? (uid => $copy->[0]->{id}) : ()),
+		});
 }
 
 1;

@@ -1,24 +1,21 @@
-package Users;
+package Messages;
 use Mojo::Base 'Mojolicious';
 
 use AccessDispatcher qw( :all );
 
-# This method will run once at server start
 sub startup {
 	my $self = shift;
 
 	# Documentation browser under "/perldoc"
 	$self->plugin('PODRenderer');
-	$self->secrets([qw( users_secret_passphrase )]);
+	$self->secrets([qw( messages_secret_passphrase )]);
 
 	# Router
 	my $r = $self->routes;
 
 	# Normal route to controller
 	my $acc = $r->under('/')->to(cb => \&check_access);
-	$acc->put('/register')->to('index#register');
-	$acc->get('/user')->to('index#get_user_info');
-	$acc->get('/users')->to('index#get_users_list');
+	$acc->post('/messages')->to('index#add_message');
 }
 
 1;
