@@ -51,9 +51,14 @@ sub get_users_list {
 
 	$page = undef if defined $u;
 
+	my $fields = "name, lastname, surname, email, phone";
+	unless ($self->stash('uid')) {
+		$fields = "name, phone";
+	}
+
 	my @args;
 	my $req = sprintf('select id, login%s from users%s order by login%s',
-		$short ? "" : ", name, lastname, surname, email, phone",
+		$short ? "" : ", $fields",
 		$u ? push(@args, $u) && " where login = ?" : "",
 		$page ? push(@args, $count, ($page - 1) * $count) && " limit ? offset ?" : "");
 

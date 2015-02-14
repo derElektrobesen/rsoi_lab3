@@ -138,8 +138,7 @@ sub get_user_info {
 sub get_users_list {
 	my $self = shift;
 
-	my $sid = $self->session('session');
-	return $self->stash(need_login => 1)->render(template => 'me') unless $sid;
+	my $sid = $self->session('session') || "obviously_false";
 
 	my %params = (
 		($self->param('page') ? (page => $self->param('page')) : ()),

@@ -48,7 +48,7 @@ my %access_control = (
 
 	'users' => {
 		method => 'get',
-		access => 'authorized',
+		access => 'partial_access',
 	},
 
 	'messages' => {
@@ -78,7 +78,7 @@ sub check_access {
 
 	return $inst->app->log->debug("Access granted") && 1 if $r->{access} eq 'all';
 
-	if ($r->{access} eq 'authorized') {
+	if ($r->{access} eq 'authorized' || $r->{access} eq 'partial_access') {
 		my $resp = send_request($inst,
 			url => 'session',
 			method => 'get',
@@ -89,12 +89,14 @@ sub check_access {
 
 		return $inst->reply->exception("Internal error: session") && undef unless $resp;
 
-		if (defined $resp->{error}) {
+		if (defined $resp->{error} && $r->{access} eq 'authorized') {
 			$inst->session(expires => 1);
 			return $inst->render(json => { error => $resp->{error} }) && undef;
+		} else {
+			$inst->app->log->warn("Session returns (partial access): " . Dumper $resp);
 		}
 
-		$inst->stash(uid => $resp->{uid});
+		$inst->stash(uid => $resp->{uid}) if $resp->{uid};
 	} else {
 		$inst->app->log->warn("Unknown access type found: $r->{access} [url: $url]");
 		return $inst->reply->exception("Internal error: access type") && undef;
