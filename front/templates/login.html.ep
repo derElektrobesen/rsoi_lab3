@@ -1,5 +1,4 @@
 % layout 'default', url => 'login';
-% title 'login';
 
 % if (stash 'logged_in') {
     <b>Already logged in.</b> <a href='/logout'>Logout</a>

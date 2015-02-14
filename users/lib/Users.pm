@@ -18,6 +18,7 @@ sub startup {
 	#$self->app->hook(before_routes => \&check_access);
 	my $acc = $r->under('/')->to(cb => \&check_access);
 	$acc->put('/register')->to('index#register');
+	$acc->get('/user')->to('index#get_user_info');
 }
 
 1;

@@ -67,6 +67,7 @@ sub logout {
 	my $self = shift;
 
 	my $sid = $self->session('session');
+	$self->session(expires => 1);
 	return $self->stash(not_login => 1)->render(template => 'logout') unless $sid;
 
 	my $r = send_request($self,
@@ -114,6 +115,24 @@ sub register {
 
 	$self->session(session => $r->{session_id});
 	return $self->redirect_to('index');
+}
+
+sub get_user_info {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+
+	return $self->stash(need_login => 1)->render(template => 'me') unless $sid;
+
+	my $r = send_request($self,
+		method => 'get',
+		url => 'user',
+		port => USERS_PORT,
+		args => { session_id => $sid });
+
+	return $self->stash(error => "Internal error: get_user_info")->render(template => 'me', user_info => '0') unless $r;
+	return $self->stash(error => $r->{error})->render(template => 'me', user_info => '0') if $r->{error};
+	return $self->render(template => 'me', user_info => $r);
 }
 
 1;

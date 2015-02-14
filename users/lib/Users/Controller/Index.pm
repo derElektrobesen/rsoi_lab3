@@ -26,4 +26,18 @@ sub register {
 	$self->render(json => { ok => 1 });
 }
 
+sub get_user_info {
+	my $self = shift;
+
+	my $sid = $self->param('session_id');
+	return $self->render(json => { error => 'session_id is not specified' }) unless $sid;
+
+	my $row = select_row($self, 'select u.login, u.name, u.lastname, u.surname, u.email, u.phone, s.session_id ' .
+		'from sessions s join users u on s.user_id = u.id where s.session_id = ?', $sid);
+
+	return $self->render(json => { error => 'DB error' }) unless $row;
+
+	return $self->render(json => $row);
+}
+
 1;

@@ -36,7 +36,7 @@ my %access_control = (
 		access => 'all',
 	},
 
-	'me' => {
+	'user' => {
 		method => 'get',
 		access => 'authorized',
 	},
@@ -84,7 +84,7 @@ sub check_access {
 			method => 'get',
 			port => SESSION_PORT,
 			args => {
-				session_id => $inst->session('session'),
+				session_id => $inst->param('session_id') || $inst->req->json()->{session_id},
 			});
 
 		return $inst->reply->exception("Internal error: session") && undef unless $resp;
