@@ -16,6 +16,7 @@ sub startup {
 	# Normal route to controller
 	my $acc = $r->under('/')->to(cb => \&check_access);
 	$acc->post('/messages')->to('index#add_message');
+	$acc->get('/messages')->to('index#get_messages');
 }
 
 1;

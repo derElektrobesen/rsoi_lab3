@@ -170,6 +170,7 @@ sub add_message {
 
 	return $self->_err('add_message', 'Internal error: get_user_id') unless $r;
 	return $self->_err('add_message', $r->{error}) if $r->{error};
+	return $self->_err('add_message', sprintf 'Invalid user: "%s"', $self->param('user')) unless $r->{uid};
 
 	my $data = { to => $r->{uid}, message => $self->param('message') };
 
@@ -197,6 +198,42 @@ sub get_add_message {
 	return $self->stash(not_logged_in => 1)->render(template => 'add_message') unless $r or $r->{data};
 
 	$self->stash(users => $r->{data})->render(template => 'add_message');
+}
+
+sub get_messages_list {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+	my %extra_args;
+
+	return $self->stash(not_logged_in => 1)->render(template => 'messages_list') unless $sid;
+
+	if ($self->param('user')) {
+		my $r = send_request($self,
+			method => 'get',
+			url => 'users',
+			port => USERS_PORT,
+			args => { session_id => $sid, short => 1, user => $self->param('user') });
+
+		return $self->_err('messages_list', 'Internal error: get_messages_list') unless $r;
+		return $self->_err('messages_list', $r->{error}) if $r->{error};
+		return $self->_err('messages_list', sprintf 'Invalid user: "%s"', $self->param('user')) unless $r->{uid};
+		$extra_args{from} = $r->{uid};
+	}
+
+	if ($self->param('page')) {
+		$extra_args{page} = $self->param('page');
+	}
+
+	my $r = send_request($self,
+		method => 'get',
+		url => 'messages',
+		port => MESSAGES_PORT,
+		args => { session_id => $sid, %extra_args });
+
+	return $self->_err('messages_list', 'Internal error: get_messages_list (msg)') unless $r;
+	return $self->_err('messages_list', $r->{error}) if $r->{error};
+	return $self->stash(messages => $r->{data})->render(template => 'messages_list');
 }
 
 1;
