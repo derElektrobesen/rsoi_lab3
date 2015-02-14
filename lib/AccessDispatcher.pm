@@ -14,6 +14,7 @@ use base qw(Exporter);
 
 our @EXPORT_OK = qw(
 	check_access
+	check_session
 );
 
 our %EXPORT_TAGS = (
@@ -48,7 +49,7 @@ my %access_control = (
 
 	'users' => {
 		method => 'get',
-		access => 'partial_access',
+		access => 'partial',
 	},
 
 	'messages' => {
@@ -62,48 +63,54 @@ my %access_control = (
 	},
 );
 
-sub check_access {
+sub check_session {
 	my $inst = shift;
 
-	my $method = $inst->req->method;
-	my $url = $inst->req->url->path->parts->[0];
+	my $sid = $inst->session('session');
+	return { logged => 0 } unless $sid;
 
-	$inst->app->log->debug("Checking access for url '$url', method '$method'");
+	$inst->app->log->debug("Check session");
+	my $resp = send_request($inst,
+		url => 'session',
+		method => 'get',
+		port => SESSION_PORT, 
+		args => { session_id => $sid });
 
-	return $inst->reply->not_found && undef unless defined $access_control{$url};
+	return { error => 'Internal: check_session' } unless $resp;
+	return { error => $resp->{error} } if defined $resp->{error};
+
+	return { logged => 1, uid => $resp->{uid} };
+}
+
+sub check_access {
+	my $inst = shift;
+	my %args = (
+		recursion_depth => 1,
+		method => 'get',
+		url => undef,
+		@_,
+	);
+
+	my ($url, $method) = @args{qw( url method )};
+	$inst->app->log->debug("Check access for url '$url', method '$method'");
+
+	return { error => "Can't find access rules for $url" } unless defined $access_control{$url};
 
 	my $r = $access_control{$url};
-	return $inst->reply->exception("Unsupported request method for $url") && undef
+	return { error => "Unsupported request method for $url" }
 		if $r->{method} ne 'any' and uc($r->{method}) ne uc($method);
 
-	return $inst->app->log->debug("Access granted") && 1 if $r->{access} eq 'all';
+	my $ret = check_session($inst);
+	return $ret if $ret->{error};
+	return $inst->app->log->debug("Access granted") && $ret if $r->{access} eq 'all';
 
-	if ($r->{access} eq 'authorized' || $r->{access} eq 'partial_access') {
-		my $resp = send_request($inst,
-			url => 'session',
-			method => 'get',
-			port => SESSION_PORT,
-			args => {
-				session_id => $inst->param('session_id') || $inst->req->json()->{session_id},
-			});
-
-		return $inst->reply->exception("Internal error: session") && undef unless $resp;
-
-		if (defined $resp->{error} && $r->{access} eq 'authorized') {
-			$inst->session(expires => 1);
-			return $inst->render(json => { error => $resp->{error} }) && undef;
-		} else {
-			$inst->app->log->warn("Session returns (partial access): " . Dumper $resp);
-		}
-
-		$inst->stash(uid => $resp->{uid}) if $resp->{uid};
-	} else {
-		$inst->app->log->warn("Unknown access type found: $r->{access} [url: $url]");
-		return $inst->reply->exception("Internal error: access type") && undef;
+	if ($r->{access} !~ /^(authorized|partial)$/) {
+		$ret = { error => "Unknown access type found: $r->{access} [url: $url]");
 	}
 
-	$inst->app->log->debug("Access granted");
-	return 1;
+	$inst->session(expires => 1) if $ret->{error} && $r->{access} ne 'partial';
+	$inst->app->log->debug("Access granted") unless $ret->{error};
+	return $ret;
 }
 
 1;
