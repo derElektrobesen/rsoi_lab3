@@ -7,7 +7,8 @@
 % } else {
 %    my $user_info = stash 'user_info';
      <table data-toggle="table">
-%    for (qw( login email name lastname surname phone)) {
+     <tr><td><b>Login:</b></td><td><a href="/users?user=<%= $user_info->{login} %>"><%= $user_info->{login} %></a></td></tr>
+%    for (qw( email name lastname surname phone)) {
         <tr><td><b><%= $_ %>:</b></td><td><%= $user_info->{$_} %></td></tr>
 %    }
      </table>

@@ -141,11 +141,16 @@ sub get_users_list {
 	my $sid = $self->session('session');
 	return $self->stash(need_login => 1)->render(template => 'me') unless $sid;
 
+	my %params = (
+		($self->param('page') ? (page => $self->param('page')) : ()),
+		($self->param('user') ? (user => $self->param('user')) : ()),
+	);
+
 	my $r = send_request($self,
 		method => 'get',
 		url => 'users',
 		port => USERS_PORT,
-		args => { session_id => $sid });
+		args => { session_id => $sid, %params });
 
 	return $self->_err('users', "Internal error: get_user_info") unless $r;
 	return $self->_err('users', $r->{error}) if $r->{error};

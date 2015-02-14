@@ -44,11 +44,22 @@ sub get_user_info {
 sub get_users_list {
 	my $self = shift;
 
-	my $content = select_all($self, 'select login, name, lastname, surname, email, phone from users order by login');
+	my $count = 2;
+	my $page = $self->param('page');
+	my $u = $self->param('user');
 
-	return $self->render(json => { error => 'DB error' }) unless $content;
+	$page = undef if defined $u;
 
-	return $self->render(json => { data => $content });
+	my @args;
+	my $req = sprintf('select login, name, lastname, surname, email, phone from users %s order by login %s',
+		$u ? push(@args, $u) && "where login = ?" : "",
+		$page ? push(@args, $count, ($page - 1) * $count) && "limit ? offset ?" : "");
+
+	my $content = select_all($self, $req, @args);
+
+	return $self->render(json => { error => ($u ? "User $u not found in DB" : "No users found in DB") }) unless $content;
+
+	return $self->render(json => { data => $content, ($page ? (page => $page) : ()), count => scalar @$content });
 }
 
 1;
