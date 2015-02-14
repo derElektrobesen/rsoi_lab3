@@ -1,0 +1,25 @@
+% layout 'default', url => 'register';
+
+<form action="/register" method="POST">
+% if (stash 'error') {
+    <b><%= stash 'error' %></b><br><br>
+% }
+
+Login:<br>
+%= text_field 'login'
+<br>Password:<br>
+%= password_field 'password'
+<br>Confirm password:<br>
+%= password_field 'r_password'
+<br>Name:<br>
+%= text_field 'name'
+<br>Surname:<br>
+%= text_field 'surname'
+<br>Lastname:<br>
+%= text_field 'lastname'
+<br>Email:<br>
+%= text_field 'email'
+<br>Phone:<br>
+%= text_field 'phone'
+<br><br><input type="submit" value="Register">
+</form>

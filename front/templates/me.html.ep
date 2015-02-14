@@ -1,0 +1,14 @@
+% layout 'default', url => 'me';
+
+% if (stash 'need_login') {
+    <b>Need to <a href='/login'>login</a></b>
+% } elsif (stash 'error') {
+    <b><%= stash 'error' %></b>
+% } else {
+%    my $user_info = stash 'user_info';
+     <table data-toggle="table"
+%    for (sort keys %$user_info) {
+        <tr><td><b><%= $_ %>:</b></td><td><%= $user_info->{$_} %></td></tr>
+%    }
+     </table>
+% }

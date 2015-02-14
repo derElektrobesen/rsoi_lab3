@@ -1,0 +1,11 @@
+% layout 'default', url => 'logout';
+
+% if (stash 'not_login') {
+    <b>Need to <a href='/login'>login</a>.</b>
+% } elsif (stash 'error') {
+    <b><%= stash 'error' %></b>
+% } elsif (stash 'done') {
+    <b>Success</b>
+% } else {
+    <b>Unknown result</b>
+% }

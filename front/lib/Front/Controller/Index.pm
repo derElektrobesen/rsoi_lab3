@@ -130,9 +130,9 @@ sub get_user_info {
 		port => USERS_PORT,
 		args => { session_id => $sid });
 
-	return $self->stash(error => "Internal error: get_user_info")->render(template => 'me', user_info => '0') unless $r;
-	return $self->stash(error => $r->{error})->render(template => 'me', user_info => '0') if $r->{error};
-	return $self->render(template => 'me', user_info => $r);
+	return $self->_err('me', "Internal error: get_user_info") unless $r;
+	return $self->_err('me', $r->{error}) if $r->{error};
+	return $self->stash(user_info => $r)->render(template => 'me');
 }
 
 1;
