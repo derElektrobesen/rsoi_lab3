@@ -1,0 +1,21 @@
+% layout 'default', url => 'messages';
+
+% if (stash 'error') {
+    <b><%= stash 'error' %></b>
+% } elsif (stash 'not_logged_in') {
+    <b>Need to <a href="/login">login</a>.</b>
+% } else {
+     <table data-toggle="table">
+%        my $data = stash 'messages';
+%        for my $msg (@$data) {
+%            for (qw( user_from user_to )) {
+                 <tr><td><%= $_ %>:</td><td><a href='/messages?user=<%= $msg->{$_} %>'><%= $msg->{$_} %></a></td></tr>
+%            }
+%            for (qw( date msg )) {
+                <tr><td><%= $_ %>:</td><td><%= $msg->{$_} %></td></tr>
+%            }
+             <tr><td>&nbsp;</td><td></td></tr>
+             <tr><td>&nbsp;</td><td></td></tr>
+%        }
+     </table>
+% }
