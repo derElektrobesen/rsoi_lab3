@@ -59,7 +59,24 @@ sub login {
 		return $self->redirect_to('index');
 	}
 
-	return $self->_err('login', 'Invalid login or password');
+	return $self->_err('login', $r->{error}) if $r && $r->{error};
+	return $self->_err('login', "Internal error");
+}
+
+sub logout {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+	return $self->stash(not_login => 1)->render(template => 'logout') unless $sid;
+
+	my $r = send_request($self,
+		method => 'delete',
+		url => 'logout',
+		port => SESSION_PORT,
+		args => { session_id => $sid });
+
+	return $self->stash(error => $r ? $r->{error} : "Internal error") if not $r or not defined $r->{ok};
+	return $self->stash(done => 1)->render(template => 'logout');
 }
 
 sub register {
