@@ -135,4 +135,21 @@ sub get_user_info {
 	return $self->stash(user_info => $r)->render(template => 'me');
 }
 
+sub get_users_list {
+	my $self = shift;
+
+	my $sid = $self->session('session');
+	return $self->stash(need_login => 1)->render(template => 'me') unless $sid;
+
+	my $r = send_request($self,
+		method => 'get',
+		url => 'users',
+		port => USERS_PORT,
+		args => { session_id => $sid });
+
+	return $self->_err('users', "Internal error: get_user_info") unless $r;
+	return $self->_err('users', $r->{error}) if $r->{error};
+	return $self->stash(users_info => $r->{data})->render(template => 'users');
+}
+
 1;

@@ -37,7 +37,18 @@ sub get_user_info {
 
 	return $self->render(json => { error => 'DB error' }) unless $row;
 
+	delete $row->{session_id};
 	return $self->render(json => $row);
+}
+
+sub get_users_list {
+	my $self = shift;
+
+	my $content = select_all($self, 'select login, name, lastname, surname, email, phone from users order by login');
+
+	return $self->render(json => { error => 'DB error' }) unless $content;
+
+	return $self->render(json => { data => $content });
 }
 
 1;

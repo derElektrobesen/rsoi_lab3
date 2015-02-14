@@ -19,6 +19,7 @@ sub startup {
 	my $acc = $r->under('/')->to(cb => \&check_access);
 	$acc->put('/register')->to('index#register');
 	$acc->get('/user')->to('index#get_user_info');
+	$acc->get('/users')->to('index#get_users_list');
 }
 
 1;

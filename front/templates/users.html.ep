@@ -1,0 +1,19 @@
+% layout 'default', url => 'users';
+
+% if (stash 'need_login') {
+    <b>Need to <a href='/login'>login</a></b>
+% } elsif (stash 'error') {
+    <b><%= stash 'error' %></b>
+% } else {
+%    my $users_info = stash 'users_info';
+     <table data-toggle="table">
+%    for (@$users_info) {
+%        my $user_info = $_;
+%        for (qw( login email name lastname surname phone)) {
+             <tr><td><b><%= $_ %>:</b></td><td><%= $user_info->{$_} %></td></tr>
+%        }
+         <tr><td>&nbsp;</td><td></td></tr>
+         <tr><td>&nbsp;</td><td></td></tr>
+%    }
+     </table>
+% }
