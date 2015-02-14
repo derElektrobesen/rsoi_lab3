@@ -7,6 +7,8 @@ use Carp qw(croak);
 use Mojo::UserAgent;
 use Data::Dumper::OneLine;
 
+use AccessDispatcher qw( check_access );
+
 use base qw(Exporter);
 
 our @EXPORT_OK = qw(
@@ -23,18 +25,24 @@ sub send_request {
 		method => 'get',
 		url => undef,
 		port => undef,
+		recursion_depth => 1,
 		args => {},
 		@_,
 	);
 
+	my $url = $args{url};
 	$args{url} = "http://localhost/$args{url}" if defined $args{url};
 
 	$inst->app->log->debug(sprintf "Sending request [method: %s] [url: %s] [port: %d] [args: %s]",
 		uc($args{method}), $args{url}, $args{port}, Dumper $args{args});
 
 	croak 'url not specified' unless $args{url};
+	croak 'max recursion depth reached' if $args{recursion_depth} > 3;
 
-	my $url = Mojo::URL->new($args{url});
+	my $ret = check_access($inst, url => $url, method => $args{method}, recursion_depth => $args{recursion_depth});
+	return $ret unless $ret->{granted};
+
+	$url = Mojo::URL->new($args{url});
 	$url->port($args{port}) if defined $args{port};
 
 	my $ua = Mojo::UserAgent->new();

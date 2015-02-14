@@ -15,10 +15,9 @@ sub startup {
 	my $r = $self->routes;
 
 	# Normal route to controller
-	my $acc = $r->under('/')->to(cb => \&check_access);
-	$acc->put('/register')->to('index#register');
-	$acc->get('/user')->to('index#get_user_info');
-	$acc->get('/users')->to('index#get_users_list');
+	$r->put('/register')->to('index#register');
+	$r->get('/user')->to('index#get_user_info');
+	$r->get('/users')->to('index#get_users_list');
 }
 
 1;

@@ -65,6 +65,7 @@ my %access_control = (
 
 sub check_session {
 	my $inst = shift;
+	my $recursion_depth = shift;
 
 	my $sid = $inst->session('session');
 	return { logged => 0 } unless $sid;
@@ -73,7 +74,8 @@ sub check_session {
 	my $resp = send_request($inst,
 		url => 'session',
 		method => 'get',
-		port => SESSION_PORT, 
+		port => SESSION_PORT,
+		recursion_depth => $recursion_depth + 1,
 		args => { session_id => $sid });
 
 	return { error => 'Internal: check_session' } unless $resp;
@@ -100,16 +102,17 @@ sub check_access {
 	return { error => "Unsupported request method for $url" }
 		if $r->{method} ne 'any' and uc($r->{method}) ne uc($method);
 
-	my $ret = check_session($inst);
-	return $ret if $ret->{error};
+	my $ret = check_session($inst, $args{recursion_depth});
+	return $inst->session(expires => 1) && $ret if $ret->{error};
+
+	$ret->{granted} = 1;
 	return $inst->app->log->debug("Access granted") && $ret if $r->{access} eq 'all';
 
 	if ($r->{access} !~ /^(authorized|partial)$/) {
-		$ret = { error => "Unknown access type found: $r->{access} [url: $url]");
+		$ret = { error => "Unknown access type found: $r->{access} [url: $url]" };
 	}
 
-	$inst->session(expires => 1) if $ret->{error} && $r->{access} ne 'partial';
-	$inst->app->log->debug("Access granted") unless $ret->{error};
+	$inst->app->log->debug("Access granted");
 	return $ret;
 }
 
