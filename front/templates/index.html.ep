@@ -1,5 +1,5 @@
-% layout 'default';
-% title 'Welcome';
+% layout 'default', url => 'index';
+
 This page was generated from the template "templates/example/welcome.html.ep"
 and the layout "templates/layouts/default.html.ep",
 <a href="<%== url_for %>">click here</a> to reload the page or

@@ -30,7 +30,7 @@ sub login {
 
 	$self->app->log->debug("Trying to login");
 	my $r = send_request($self,
-		method => 'post',
+		method => 'put',
 		url => 'http://localhost/login',
 		port => SESSION_PORT,
 		args => {
@@ -68,7 +68,7 @@ sub register {
 	return $self->_err('register', $r->{error}) if $r->{error};
 
 	$r = send_request($self,
-		method => 'post',
+		method => 'put',
 		url => 'login',
 		port => SESSION_PORT,
 		args => {
