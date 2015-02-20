@@ -14,6 +14,7 @@ our @EXPORT_OK = qw(
 	USERS_PORT
 	MESSAGES_PORT
 	SESSION_PORT
+	MAX_USERS_PER_QUERY
 );
 
 our %EXPORT_TAGS = (
@@ -39,5 +40,6 @@ sub LOGIC_PORT()	{ return $PORTS{LOGIC_PORT} || croak "Can't locate LOGIC_PORT i
 sub USERS_PORT()	{ return $PORTS{USERS_PORT} || croak "Can't locate USERS_PORT in config\n"; }
 sub MESSAGES_PORT()	{ return $PORTS{MESSAGES_PORT} || croak "Can't locate MESSAGES_PORT in config\n"; }
 sub SESSION_PORT()	{ return $PORTS{SESSION_PORT} || croak "Can't locate SESSION_PORT in config\n"; }
+sub MAX_USERS_PER_QUERY() { return 2; }
 
 1;

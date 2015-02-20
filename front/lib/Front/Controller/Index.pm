@@ -1,5 +1,6 @@
 package Front::Controller::Index;
 use Mojo::Base 'Mojolicious::Controller';
+use Mojo::JSON qw( encode_json );
 
 use MainConfig qw( :all );
 use AccessDispatcher qw( send_request );
@@ -199,24 +200,28 @@ sub get_add_message {
 sub get_messages_list {
 	my $self = shift;
 
-	my $sid = $self->session('session');
 	my %extra_args;
+	my $u_param = $self->param('user');
 
-	return $self->stash(not_logged_in => 1)->render(template => 'messages_list') unless $sid;
+	return $self->stash(not_logged_in => 1)->render(template => 'messages_list') unless $self->session('session');
 
 	my $uid;
-	if ($self->param('user')) {
+	my %users_names;
+	if ($u_param) {
 		my $r;
 		($r, $uid) = send_request($self,
 			method => 'get',
 			url => 'users',
 			port => USERS_PORT,
-			args => { session_id => $sid, short => 1, user => $self->param('user') });
+			args => { user => $u_param });
 
 		return $self->_err('messages_list', 'Internal error: get_messages_list') unless $r;
 		return $self->_err('messages_list', $r->{error}) if $r->{error};
-		return $self->_err('messages_list', sprintf 'Invalid user: "%s"', $self->param('user')) unless $r->{uid};
+		return $self->_err('messages_list', "User $u_param not found") unless $r->{count};
+		return $self->_err('messages_list', sprintf 'Invalid user: "%s"', $u_param) unless $r->{uid};
 		$extra_args{from} = $r->{uid};
+		my $u = $r->{data}->[0];
+		$users_names{$u->{id}} = $u->{login};
 	}
 
 	if ($self->param('page')) {
@@ -232,6 +237,49 @@ sub get_messages_list {
 
 	return $self->_err('messages_list', 'Internal error: get_messages_list (msg)') unless $r;
 	return $self->_err('messages_list', $r->{error}) if $r->{error};
+
+	if ($r->{count} == 0) {
+		return $self->_err('messages_list', "User $u_param have no messages") if $u_param;
+		return $self->_err('messages_list', "No messages found");
+	}
+
+	my %users;
+	for my $m (@{$r->{data}}) {
+		$users{$m->{user_from}} = 1;
+		$users{$m->{user_to}} = 1;
+	}
+
+	if (scalar %users_names) {
+		delete $users{(keys %users_names)[0]};
+	}
+	my @users = keys %users;
+	my $users_count = scalar @users;
+	my $off = 0;
+	while ($off < $users_count) {
+		my $count = ($off + MAX_USERS_PER_QUERY > $users_count ? $users_count - $off : MAX_USERS_PER_QUERY);
+		my @uids = @users[$off .. $off + $count - 1];
+
+		my $users_names = send_request($self,
+			method => 'get',
+			url => 'users',
+			port => USERS_PORT,
+			check_session => 0,
+			args => { short => 1, users => encode_json([ @uids ]) });
+
+		return $self->_err('messages_list', 'Internal error: get_messages_list (msg)') unless $users_names;
+		return $self->_err('messages_list', $users_names->{error}) if $users_names->{error};
+		return $self->_err('messages_list', 'Internal error: unknown response') unless $users_names->{data};
+
+		map { $users_names{$_->{id}} = $_->{login} } @{$users_names->{data}};
+
+		$off += $count;
+	}
+
+	for my $m (@{$r->{data}}) {
+		$m->{user_from} = $users_names{$m->{user_from}};
+		$m->{user_to} = $users_names{$m->{user_to}};
+	}
+
 	return $self->stash(messages => $r->{data})->render(template => 'messages_list');
 }
 
