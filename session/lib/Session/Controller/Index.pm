@@ -22,9 +22,11 @@ sub check_session {
 	$self->open_memc;
 
 	return $self->render(json => { error => 'session_id not specified' }) unless $self->param('session_id');
+	return $self->render(json => { error => 'user_agent not specified' }) unless $self->param('user_agent');
 
-	my $r = select_row($self, 'select user_id from sessions where session_id = ?', $self->param('session_id'));
-	return $self->render(json => { error => 'unauthorized' }) unless $r and $r->{user_id};
+	my $r = $self->{memc}->get('session_' . $self->param('session_id'));
+	return $self->render(json => { error => 'unauthorized' })
+		unless $r and $r->{user_id} and ($r->{user_agent} eq md5_hex($self->param('user_agent')));
 
 	return $self->render(json => { ok => 1, uid => $r->{user_id} });
 }
@@ -35,15 +37,15 @@ sub login {
 	$self->open_memc;
 	my $came = $self->req->json();
 
-	my ($login, $pass) = @$came{qw( login password )};
-	return $self->render(json => { error => 'login or password is not specified' }) unless $login and $pass;
+	my ($login, $pass, $ua) = @$came{qw( login password user_agent )};
+	return $self->render(json => { error => 'login or password or user_agent is not specified' }) unless $login and $pass and $ua;
 
 	my $r = select_row($self, 'select id, password from users where login = ?', $login);
 	return $self->render(json => { error => 'invalid login or password' }) if not $r or $r->{password} ne $pass;
 
-	my $sum = md5_hex("$r->{id}" . time . rand 100500);
-	return $self->renser(json => { error => 'Internal error: mysql' })
-		unless execute_query($self, 'insert into sessions(session_id, user_id) values (?,?)', $sum, $r->{id});
+	my $sum = md5_hex("$r->{id}" . time . rand(100500) . "$ua");
+
+	$self->{memc}->set("session_$sum", { user_id => $r->{id}, user_agent => md5_hex($ua) }, 10 * 60);
 
 	return $self->render(json => { session_id => $sum });
 }
@@ -55,7 +57,8 @@ sub logout {
 	my $came = $self->req->json();
 	return $self->render(json => { error => 'session_id not specified' }) unless $came->{session_id};
 
-	execute_query($self, 'delete from sessions where session_id = ?', $came->{session_id});
+	$self->{memc}->delete("session_$came->{session_id}");
+
 	return $self->render(json => { ok => 1 });
 }
 

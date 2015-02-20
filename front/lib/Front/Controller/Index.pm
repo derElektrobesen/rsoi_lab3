@@ -53,6 +53,7 @@ sub login {
 		args => {
 			login => $login,
 			password => $pass,
+			user_agent => $self->req->headers->user_agent,
 		});
 
 	if ($r && $r->{session_id}) {

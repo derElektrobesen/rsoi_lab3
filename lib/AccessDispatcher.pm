@@ -24,42 +24,42 @@ our %EXPORT_TAGS = (
 my %access_control = (
 	'login' => {
 		method => 'post',
-		access => 'all',
+		access => 'full',
 	},
 
 	'logout' => {
 		method => 'any',
-		access => 'authorized',
+		access => 'Authorized',
 	},
 
 	'register' => {
 		method => 'put',
-		access => 'all',
+		access => 'full',
 	},
 
 	'user' => {
 		method => 'get',
-		access => 'authorized',
+		access => 'Authorized',
 	},
 
 	'send_message' => {
 		method => 'get',
-		access => 'authorized',
+		access => 'Authorized',
 	},
 
 	'users' => {
 		method => 'get',
-		access => 'partial',
+		access => 'Partial',
 	},
 
 	'messages' => {
 		method => 'any',
-		access => 'authorized',
+		access => 'Authorized',
 	},
 
 	'session' => {
 		method => 'any',
-		access => 'all',
+		access => 'full',
 	},
 );
 
@@ -70,13 +70,15 @@ sub check_session {
 	my $sid = $inst->session('session');
 	return { logged => 0 } unless $sid;
 
-	$inst->app->log->debug("Check session");
+	my $ua = $inst->req->headers->user_agent;
+
+	$inst->app->log->debug("Check session ($ua)");
 	my $resp = send_request($inst,
 		url => 'session',
 		method => 'get',
 		port => SESSION_PORT,
 		recursion_depth => $recursion_depth + 1,
-		args => { session_id => $sid });
+		args => { session_id => $sid, user_agent => $ua });
 
 	return { error => 'Internal: check_session' } unless $resp;
 	return { error => $resp->{error} } if defined $resp->{error};
@@ -105,16 +107,22 @@ sub check_access {
 
 	my $ret = {};
 	$ret = check_session($inst, $args{recursion_depth}) if $args{check_session};
-	return $inst->session(expires => 1) && $ret if $ret->{error};
+	$inst->session(expires => 1) if $ret->{error};
+	return $ret if $ret->{error} && $ret->{error} ne 'unauthorized';
 
 	$ret->{granted} = 1;
-	return $inst->app->log->debug("Access granted") && $ret if $r->{access} eq 'all';
+	return $inst->app->log->debug("Access granted") && (delete($ret->{error}) || 1) && $ret if $r->{access} eq 'full';
 
-	if ($r->{access} !~ /^(authorized|partial)$/) {
+	if ($r->{access} !~ /^(Authorized|Partial)$/) {
 		$ret = { error => "Unknown access type found: $r->{access} [url: $url]" };
 	}
 
-	$inst->app->log->debug("Access granted");
+	if ($ret->{error}) {
+		$inst->app->log->debug("Access denied");
+		return { error => "unauthorized" };
+	}
+
+	$inst->app->log->debug("$r->{access} access granted");
 	return $ret;
 }
 
