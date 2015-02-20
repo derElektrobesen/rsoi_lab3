@@ -29,15 +29,12 @@ sub register {
 sub get_user_info {
 	my $self = shift;
 
-	my $sid = $self->param('session_id');
-	return $self->render(json => { error => 'session_id is not specified' }) unless $sid;
+	my $uid = $self->param('uid');
+	return $self->render(json => { error => 'uid is not specified' }) unless $uid;
 
-	my $row = select_row($self, 'select u.login, u.name, u.lastname, u.surname, u.email, u.phone, s.session_id ' .
-		'from sessions s join users u on s.user_id = u.id where s.session_id = ?', $sid);
+	my $row = select_row($self, 'select login, name, lastname, surname, email, phone from users where id = ?', $uid);
 
 	return $self->render(json => { error => 'DB error' }) unless $row;
-
-	delete $row->{session_id};
 	return $self->render(json => $row);
 }
 
@@ -48,12 +45,13 @@ sub get_users_list {
 	my $page = $self->param('page');
 	my $u = $self->param('user');
 	my $short = $self->param('short');
+	my $uid = $self->param('uid');
 
 	$page = undef if defined $u;
 
 	my $fields = "name, lastname, surname, email, phone";
-	unless ($self->stash('uid')) {
-		$fields = "name, phone";
+	unless ($uid) {
+		$fields = "name, email";
 	}
 
 	my @args;

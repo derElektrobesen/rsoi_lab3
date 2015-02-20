@@ -103,7 +103,7 @@ sub check_access {
 	return { error => "Unsupported request method for $url" }
 		if $r->{method} ne 'any' and uc($r->{method}) ne uc($method);
 
-	my $ret = { granted => 1 };
+	my $ret = {};
 	$ret = check_session($inst, $args{recursion_depth}) if $args{check_session};
 	return $inst->session(expires => 1) && $ret if $ret->{error};
 
@@ -135,9 +135,6 @@ sub send_request {
 
 	$args{url} = "http://localhost/$args{url}" if defined $args{url};
 
-	$inst->app->log->debug(sprintf "Sending request [method: %s] [url: %s] [port: %d] [args: %s]",
-		uc($args{method}), $args{url}, $args{port}, Dumper $args{args});
-
 	croak 'url not specified' unless $args{url};
 	croak 'max recursion depth reached' if $args{recursion_depth} > 3;
 
@@ -151,6 +148,12 @@ sub send_request {
 	$url->port($args{port}) if defined $args{port};
 
 	my $ua = Mojo::UserAgent->new();
+
+	$args{args}->{uid} = $ret->{uid} unless $args{args}->{uid};
+
+	map { delete $args{args}->{$_} unless defined $args{args}->{$_} } keys %{$args{args}};
+	$inst->app->log->debug(sprintf "Sending request [method: %s] [url: %s] [port: %d] [args: %s]",
+		uc($args{method}), $args{url}, $args{port}, Dumper $args{args});
 
 	my @ua_args = ($url => json => $args{args});
 	my %switch = (
@@ -170,7 +173,7 @@ sub send_request {
 		$inst->app->log->debug("Response: " . Dumper($resp));
 	}
 
-	return $resp;
+	return wantarray ? ($resp, $args{args}->{uid}) : $resp;
 }
 
 1;

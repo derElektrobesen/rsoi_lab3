@@ -12,7 +12,7 @@ sub add_message {
 	return $self->render(json => { error => 'unknown uid' }) unless $args->{to};
 
 	my $r = execute_query($self, 'insert into messages(msg, user_from, user_to) values (?, ?, ?)',
-		$args->{message}, $self->stash('uid'), $args->{to});
+		$args->{message}, $args->{uid}, $args->{to});
 
 	return $self->render(json => { error => "DB error" }) unless $r;
 	return $self->render(json => { ok => 1 });
