@@ -6,6 +6,17 @@ use DB qw( :all );
 use MainConfig qw( MAX_USERS_PER_QUERY );
 use Data::Dumper::OneLine;
 
+use Cache::Memcached;
+
+sub open_memc {
+	my $self = shift;
+	$self->{memc} = Cache::Memcached->new({
+		servers => ['127.0.0.1:11211'],
+	}) unless defined $self->{memc};
+
+	$self->app->log->error("Can't open connection to Memcached") unless $self->{memc};
+}
+
 sub register {
 	my $self = shift;
 	$self->app->log->debug("Registration process started");
@@ -24,6 +35,9 @@ sub register {
 	my $q = join '', map { '?,' } 1 .. scalar @args;
 	$q =~ s/,$//;
 	execute_query($self, sprintf("insert into users (%s) values (%s)", join(',', @args), $q), @$came{@args});
+
+	$self->open_memc;
+	$self->{memc}->delete('users_pages_count');
 
 	$self->render(json => { ok => 1 });
 }
@@ -57,6 +71,16 @@ sub get_users_list {
 		$fields = "name, email";
 	}
 
+	$self->open_memc;
+	my $pages_count = $self->{memc}->get('users_pages_count');
+	unless (defined $pages_count) {
+		my $r = select_row($self, 'select count(id) as c from users');
+		return $self->render(json => { error => 'DB error' }) unless $r;
+
+		$pages_count = int($r->{c} / $count + 0.99);
+		$self->{memc}->set('users_pages_count', $pages_count);
+	}
+
 	my $users_list;
 	if (defined $users_uids) {
 		$users_list = decode_json($users_uids);
@@ -82,7 +106,7 @@ sub get_users_list {
 	$content = [ map { $_->{login} } @$content ] if $short and not $users_uids;
 	return $self->render(json => {
 			data => $content,
-			($page ? (page => $page) : ()),
+			($page ? (page => $page, total => $pages_count) : ()),
 			count => scalar @$content,
 			($u ? (uid => $copy->[0]->{id}) : ()),
 		});

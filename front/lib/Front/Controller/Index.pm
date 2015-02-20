@@ -153,6 +153,7 @@ sub get_users_list {
 
 	return $self->_err('users', "Internal error: get_user_info") unless $r;
 	return $self->_err('users', $r->{error}) if $r->{error};
+	return $self->_err('users', "No users found") unless $r->{count};
 	return $self->stash(users_info => $r->{data})->render(template => 'users');
 }
 

@@ -5,9 +5,21 @@ use DB qw( :all );
 use Digest::MD5 qw( md5_hex );
 
 use Data::Dumper::OneLine;
+use Cache::Memcached;
+
+sub open_memc {
+	my $self = shift;
+	$self->{memc} = Cache::Memcached->new({
+		servers => ['127.0.0.1:11211'],
+	}) unless defined $self->{memc};
+
+	$self->app->log->error("Can't open connection to Memcached") unless $self->{memc};
+}
 
 sub check_session {
 	my $self = shift;
+
+	$self->open_memc;
 
 	return $self->render(json => { error => 'session_id not specified' }) unless $self->param('session_id');
 
@@ -20,6 +32,7 @@ sub check_session {
 sub login {
 	my $self = shift;
 
+	$self->open_memc;
 	my $came = $self->req->json();
 
 	my ($login, $pass) = @$came{qw( login password )};
@@ -38,6 +51,7 @@ sub login {
 sub logout {
 	my $self = shift;
 
+	$self->open_memc;
 	my $came = $self->req->json();
 	return $self->render(json => { error => 'session_id not specified' }) unless $came->{session_id};
 
