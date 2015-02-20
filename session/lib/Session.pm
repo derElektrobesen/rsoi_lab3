@@ -14,7 +14,7 @@ sub startup {
 
 	# Normal route to controller
 	$r->get('/session')->to('index#check_session');
-	$r->put('/login')->to('index#login');
+	$r->post('/login')->to('index#login');
 	$r->route('/logout')->via('DELETE')->to('index#logout');
 }
 

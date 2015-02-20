@@ -2,7 +2,7 @@ package Front::Controller::Index;
 use Mojo::Base 'Mojolicious::Controller';
 
 use MainConfig qw( :all );
-use RequestSender qw( send_request );
+use AccessDispatcher qw( send_request );
 
 use Data::Dumper::OneLine;
 
@@ -46,7 +46,7 @@ sub login {
 
 	$self->app->log->debug("Trying to login");
 	my $r = send_request($self,
-		method => 'put',
+		method => 'post',
 		url => 'login',
 		port => SESSION_PORT,
 		args => {
@@ -105,6 +105,7 @@ sub register {
 		method => 'put',
 		url => 'login',
 		port => SESSION_PORT,
+		check_session => 0,
 		args => {
 			login => $params{login},
 			password => $params{password},
@@ -177,6 +178,7 @@ sub add_message {
 		method => 'post',
 		url => 'messages',
 		port => MESSAGES_PORT,
+		check_session => 0,
 		args => { session_id => $sid, %$data });
 
 	return $self->_err('add_message', 'Internal error: add_message') unless $r;
@@ -228,6 +230,7 @@ sub get_messages_list {
 		method => 'get',
 		url => 'messages',
 		port => MESSAGES_PORT,
+		check_session => 0,
 		args => { session_id => $sid, %extra_args });
 
 	return $self->_err('messages_list', 'Internal error: get_messages_list (msg)') unless $r;
