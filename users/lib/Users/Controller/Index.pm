@@ -95,7 +95,7 @@ sub get_users_list {
 	my $req = sprintf('select id, login%s from users%s%s order by login%s',
 		$short ? "" : ", $fields",
 		$u ? push(@args, $u) && " where login = ?" : "",
-		$users_list ? push(@args, @$users_list) && (($u ? " " : " where") . " id in (" . join(',', map { '?' } @$users_list)) . ')' : "",
+		$users_list ? push(@args, @$users_list) && (($u ? " and" : " where") . " id in (" . join(',', map { '?' } @$users_list)) . ')' : "",
 		$page ? push(@args, $count, ($page - 1) * $count) && " limit ? offset ?" : "");
 
 	my $content = select_all($self, $req, @args);
