@@ -30,7 +30,7 @@ sub get_login {
 			method => 'get',
 			url => 'session',
 			port => SESSION_PORT,
-			args => { session_id => $sid });
+			args => { session_id => $sid, user_agent => $self->req->headers->user_agent });
 		return $self->stash(logged_in => 1)->render(template => 'login') if $r && $r->{ok};
 		$self->session(expires => 1);
 	}
