@@ -33,7 +33,7 @@ my %access_control = (
 	},
 
 	'register' => {
-		method => 'put',
+		method => 'post',
 		access => 'full',
 	},
 

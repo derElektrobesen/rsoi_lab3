@@ -95,7 +95,7 @@ sub register {
 	return $self->_err('register', 'Passwords do not match') if $params{password} ne $params{r_password};
 
 	my $r = send_request($self,
-		method => 'put',
+		method => 'post',
 		url => 'register',
 		port => USERS_PORT,
 		args => \%params);
@@ -104,7 +104,7 @@ sub register {
 	return $self->_err('register', $r->{error}) if $r->{error};
 
 	$r = send_request($self,
-		method => 'put',
+		method => 'post',
 		url => 'login',
 		port => SESSION_PORT,
 		check_session => 0,

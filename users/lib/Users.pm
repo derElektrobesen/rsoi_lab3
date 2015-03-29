@@ -15,7 +15,7 @@ sub startup {
 	my $r = $self->routes;
 
 	# Normal route to controller
-	$r->put('/register')->to('index#register');
+	$r->post('/register')->to('index#register');
 	$r->get('/user')->to('index#get_user_info');
 	$r->get('/users')->to('index#get_users_list');
 }
